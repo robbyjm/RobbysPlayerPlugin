@@ -24,7 +24,7 @@ class RobbysPlayerPlugin:
         '''Send a message to all players in game.'''
         players = self.get_players()
         if len(players) > 1:
-            rcon_msg = 'Say -1 There are % players online' % len(players)
+            rcon_msg = 'Say -1 There are %i players online' % len(players)
         else:
             rcon_msg = 'Say -1 There is 1 player online'
         self.bec._Bec_queuelist.append(rcon_msg)
