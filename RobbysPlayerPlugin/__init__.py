@@ -7,15 +7,13 @@
 from twisted.internet import task
 
 
-class RobbysPlayerPlugin(object):
+class RobbysPlayerPlugin:
     ''' Player Plugin for DayZ Servers'''
 
     def __init__(self, instance):
         self.bec = instance
 
-        self.counter = 0
-
-        ''' Create a Task that calls the function Send_PlayerCount each 15 min. '''
+        # Create a Task that calls the function Send_PlayerCount each 15 min.
         self.PlayerCount_Task = task.LoopingCall(self.Send_PlayerCount)
         self.PlayerCount_Task.start(900, False)
 
@@ -23,20 +21,11 @@ class RobbysPlayerPlugin(object):
         return self.bec.Bec_playersconnected
 
     def Send_PlayerCount(self):
-        '''This Function will send aMessage to All Players In game.'''
-        x = len(self.get_players())
-        if x==1:
-            rcon_msg = "Say -1 There is " + str(x) + " player online"
-            self.bec._Bec_queuelist.append(rcon_msg)
-        else:
-            rcon_msg = "Say -1 There are " + str(x) + " players online"
-            self.bec._Bec_queuelist.append(rcon_msg)
-
-        if self.counter < 100:
-            self.counter += 1
-        else:
-            # enough Hello World, Stopping the task
-            self.PlayerCount_Task.stop()
+        '''Send a message to All Players In game.'''
+        players = self.get_players()
+        plural = len(players) > 1
+        rcon_msg = f'Say -1 There {"are" if plural else "is"} {len(players)} player{"s" if plural else ""} online'
+        self.bec._Bec_queuelist.append(rcon_msg)
 
 
 def start(x):
