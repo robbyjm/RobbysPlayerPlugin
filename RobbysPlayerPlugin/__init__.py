@@ -1,6 +1,6 @@
 '''
     File name: __init__.py
-    Author: /u/robbychampagne
+    Author: /u/robbychampagne, ThePyrotechnic
     Date created: 9/29/2018
     Date last modified: 9/29/2018
 '''
@@ -8,7 +8,7 @@ from twisted.internet import task
 
 
 class RobbysPlayerPlugin:
-    ''' Player Plugin for DayZ Servers'''
+    ''' Player plugin for DayZ servers'''
 
     def __init__(self, instance):
         self.bec = instance
@@ -21,10 +21,12 @@ class RobbysPlayerPlugin:
         return self.bec.Bec_playersconnected
 
     def Send_PlayerCount(self):
-        '''Send a message to All Players In game.'''
+        '''Send a message to all players in game.'''
         players = self.get_players()
-        plural = len(players) > 1
-        rcon_msg = f'Say -1 There {"are" if plural else "is"} {len(players)} player{"s" if plural else ""} online'
+        if len(players) > 1:
+            rcon_msg = 'Say -1 There are % players online' % len(players)
+        else:
+            rcon_msg = 'Say -1 There is 1 player online'
         self.bec._Bec_queuelist.append(rcon_msg)
 
 
