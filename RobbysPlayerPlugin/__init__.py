@@ -28,12 +28,15 @@ class RobbysPlayerPlugin:
 
     def send_player_count(self):
         '''Send a message to all players in game.'''
-        players = self.get_players()
-        if len(players) > 1:
-            message = CONFIG.get('base_message').format(len(players))
+        player_count = len(self.get_players())
+        if player_count == 0:
+        	return
+
+        elif player_count == 1:
+        	message = CONFIG.get('message_singular')
 
         else:
-            message = CONFIG.get('message_singular')
+            message = CONFIG.get('base_message').format(len(player_count))
 
         command_to_fire = 'say -1 {}'.format(message)
         self.bec._Bec_queuelist.append(command_to_fire)
